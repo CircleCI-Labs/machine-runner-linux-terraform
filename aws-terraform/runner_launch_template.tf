@@ -1,6 +1,6 @@
 
 resource "aws_launch_template" "linux_runner_launch_template" {
-  name = "${local.runner_prefix}_launch_template"
+  name = "${var.runner_prefix}_launch_template"
   block_device_mappings {
     device_name = "/dev/sda1"
     ebs {
@@ -24,7 +24,7 @@ resource "aws_launch_template" "linux_runner_launch_template" {
     security_groups             = [var.security_group_id]
   }
   placement {
-    availability_zone = "us-east-1a"
+    availability_zone = var.availability_zone
   }
 
   tag_specifications {

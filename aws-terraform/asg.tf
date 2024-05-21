@@ -1,10 +1,7 @@
 
-locals {
-  runner_prefix = "circleci_linux_runner
-}
 
 resource "aws_autoscaling_group" "linux_runner_asg" {
-  name                 = "${local.runner_prefix}_asg"
+  name                 = "${var.runner_prefix}_asg"
   availability_zones   = ["us-east-1a"]
   desired_capacity     = 0
   max_size             = 0
@@ -16,7 +13,7 @@ resource "aws_autoscaling_group" "linux_runner_asg" {
   }
   tag {
     key                 = "Name"
-    value               = local.runner_prefix
+    value               = var.runner_prefix
     propagate_at_launch = "true"
   }
 
