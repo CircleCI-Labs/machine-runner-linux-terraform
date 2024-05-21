@@ -16,7 +16,6 @@ runner_token_secret_name="arn:aws:secretsmanager:<region>:<account-id>:secret:<s
 - Step 3: Update the [`providers.tf`](https://github.com/CircleCI-Labs/machine-runner-linux-terraform/blob/main/aws-terraform/providers.tf#L1-L6) with your account specific attributes - namely the Terraform state bucket and the region
 
 - Step 4: You can use the CircleCI [config.yml](https://github.com/CircleCI-Labs/machine-runner-linux-terraform/blob/main/.circleci/config.yml) to set the following environment variables (either in a project environment variable or context)
-
-- `$TF_S3_BUCKET` (bucket where terraform.tfvars with secrets is stored)
-- `$AWS_ACCESS_KEY_ID` - Credentials for running Terraform
-- `$AWS_SECRET_ACCESS_KEY` - Credentials for running Terraform
+   - `$TF_S3_BUCKET` (bucket where terraform.tfvars with secrets is stored)
+   - `$AWS_ACCESS_KEY_ID` - Credentials for running Terraform
+   - `$AWS_SECRET_ACCESS_KEY` - Credentials for running Terraform
