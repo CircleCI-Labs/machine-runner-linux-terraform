@@ -1,12 +1,16 @@
 
+variable "aws_access_key" {
+  description = "Access key used by terraform"
+}
+
+variable "aws_secret_key" {
+  description = "Secret key used by terraform"
+}
+
 variable "aws_region" {
   default = "us-east-1"
 }
 
-
-variable "s3_tf_state_backend_bucket" {
-  description = "Backend bucket for persisting TF state"
-}
 
 variable "runner_prefix" {
   description = "Name prefix to be attached to resource names"
@@ -45,6 +49,7 @@ variable "subnet_id" {
 
 variable "security_group_id" {
   description = "Security Group for Runners"
+  default     = "sg-123456"
 }
 
 variable "runner_token_secret_name" {
@@ -58,4 +63,5 @@ variable "default_tags" {
     "iac"                 = "true"
     "owner"               = "circleci"
   }
+}
 
