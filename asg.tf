@@ -1,6 +1,5 @@
 
 locals {
-  asg_predictive_scaling_policy_name = "cci_linux_runner_predictive_scaling_policy"
   runner_prefix = "circleci_linux_runner
 }
 
