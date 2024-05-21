@@ -27,3 +27,12 @@ variable "subnet_id" {
 variable "security_group_id" {
   description = "Security Group for Runners"
 }
+
+variable "default_tags" {
+  type = map(string)
+  default = {
+    "Team"                = "circleci"
+    "iac"                 = "true"
+    "owner"               = "circleci"
+  }
+
