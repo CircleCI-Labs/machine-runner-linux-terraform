@@ -1,4 +1,4 @@
-# machine-runner-linux-terraform
+# CircleCI Machine Runner Terraform Template
 
 A simple Terraform template for creating an AWS Autoscaling Group with EC2 [CircleCI Self-Hosted Linux Runners](https://circleci.com/docs/install-machine-runner-3-on-linux/)
 
