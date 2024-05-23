@@ -28,9 +28,7 @@ executors:
      environment: 
        AWS_REGION: "us-east-1"
 
-jobs:
-  tf-plan:
-    executor: ubuntu-default
+commands:
     steps:
       - checkout
       - run:
@@ -43,6 +41,24 @@ jobs:
                sudo mv terraform /usr/local/bin/
       - aws-cli/setup:
           profile_name: $CIRCLE_PROJECT_USERNAME
+
+jobs:
+  tf-validate:
+    executor: ubuntu-default
+    steps:
+      - setup-executor
+      - run:
+          name: run terraform validate
+          command: |
+               cd << pipeline.parameters.workspace >>
+               aws s3 cp s3://$TF_S3_BUCKET/terraform-test.tfvars .
+               terraform init -backend=false
+               terraform validate
+      
+  tf-plan:
+    executor: ubuntu-default
+    steps:
+      - setup-executor
       - run:
           name: run terraform plan
           command: |
@@ -56,9 +72,15 @@ jobs:
             - .
 
 
-
 workflows:
+  tf-validate:
+    jobs:
+      - tf-validate
+      
   tf-workflow:
+    when: 
+      and: 
+       - equal: ["terraform-test", << pipeline.git.branch >>]
     jobs:
       - tf-plan:
           context: aws-context
