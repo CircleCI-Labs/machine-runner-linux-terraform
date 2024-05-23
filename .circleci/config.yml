@@ -29,6 +29,7 @@ executors:
        AWS_REGION: "us-east-1"
 
 commands:
+  setup-executor:
     steps:
       - checkout
       - run:
