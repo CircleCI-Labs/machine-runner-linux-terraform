@@ -40,8 +40,6 @@ commands:
                curl -fLSs "https://releases.hashicorp.com/terraform/<< pipeline.parameters.tf-version >>/terraform_<< pipeline.parameters.tf-version >>_linux_amd64.zip" -o "terraform_<< pipeline.parameters.tf-version >>.zip"
                sudo unzip -o terraform_<< pipeline.parameters.tf-version >>.zip
                sudo mv terraform /usr/local/bin/
-      - aws-cli/setup:
-          profile_name: $CIRCLE_PROJECT_USERNAME
 
 jobs:
   tf-validate:
@@ -52,7 +50,6 @@ jobs:
           name: run terraform validate
           command: |
                cd << pipeline.parameters.workspace >>
-               aws s3 cp s3://$TF_S3_BUCKET/terraform-test.tfvars .
                terraform init -backend=false
                terraform validate
       
