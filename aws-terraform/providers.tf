@@ -5,7 +5,7 @@ terraform {
     region = "us-east-1"
 
     assume_role = {
-      role_arn = "arn:aws:iam::992382483259:role/fieldeng_circleci_labs_oidc_oauth_role"
+      role_arn = var.tf_role_arn
     }
   }
 }
@@ -29,7 +29,7 @@ terraform {
 
 provider "aws" {
   assume_role {
-    role_arn     = "arn:aws:iam::992382483259:role/fieldeng_circleci_labs_oidc_oauth_role"
+    role_arn     = var.tf_role_arn
     session_name = "fieldeng_aws_oidc_standalone_terraform"
   }
   region = var.aws_region
