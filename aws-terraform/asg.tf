@@ -1,36 +1,35 @@
-terraform {
-  backend "s3" {
-    bucket = "circleci-labs-machine-runner-tf-state"
-    key    = "circleci-runner-aws.tfstate"
-    region = "us-east-1"
+
+
+resource "aws_autoscaling_group" "linux_runner_asg" {
+  name                 = "${var.runner_prefix}_asg"
+  availability_zones   = ["us-east-1a"]
+  desired_capacity     = 0
+  max_size             = 0
+  min_size             = 0
+  termination_policies = ["OldestInstance"]
+  launch_template {
+    id      = aws_launch_template.linux_runner_launch_template.id
+    version = "$Latest"
+  }
+  tag {
+    key                 = "Name"
+    value               = var.runner_prefix
+    propagate_at_launch = "true"
   }
 
-}
 
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.47.0"
-    }
-    local = {
-      source  = "hashicorp/local"
-      version = "2.5.1"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "3.6.1"
-    }
+  tag {
+    key                 = "env"
+    value               = "circleci"
+    propagate_at_launch = "true"
   }
-}
 
-provider "aws" {
-  # Configuration options
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
-  region     = var.aws_region
-
-  default_tags {
-    tags = var.default_tags
+  dynamic "tag" {
+    for_each = var.default_tags
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
   }
 }
