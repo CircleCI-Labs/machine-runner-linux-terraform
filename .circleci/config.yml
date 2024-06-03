@@ -72,6 +72,10 @@ jobs:
 
 workflows:
   tf-validate:
+    when:
+      and:
+        - equal: ["main", << pipeline.git.branch >> ]
+        - equal: ["https://github.com/CircleCI-Labs/machine-runner-linux-terraform", << pipeline.project.git_url >>]
     jobs:
       - tf-validate
       
