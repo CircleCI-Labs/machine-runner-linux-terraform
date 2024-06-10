@@ -61,7 +61,6 @@ jobs:
           name: run terraform plan
           command: |
                cd << pipeline.parameters.workspace >>
-               aws s3 cp s3://$TF_S3_BUCKET/terraform-test.tfvars .
                terraform init -input=false
                terraform plan -out tfapply -var-file="terraform-test.tfvars"
       - persist_to_workspace:
@@ -84,5 +83,4 @@ workflows:
       and: 
        - equal: ["terraform-test", << pipeline.git.branch >>]
     jobs:
-      - tf-plan:
-          context: aws-context
+      - tf-plan

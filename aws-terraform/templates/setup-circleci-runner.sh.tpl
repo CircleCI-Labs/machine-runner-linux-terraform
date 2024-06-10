@@ -8,5 +8,5 @@ apt-get install -y circleci-runner
 sed -i "s/<< AUTH_TOKEN >>/${cci_runner_token}/g" /etc/circleci-runner/circleci-runner-config.yaml
 systemctl enable circleci-runner && systemctl start circleci-runner
 
-# Check status
+# Check status of the runner service
 systemctl status circleci-runner

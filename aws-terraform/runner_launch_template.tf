@@ -13,6 +13,7 @@ resource "aws_launch_template" "linux_runner_launch_template" {
 
   image_id                             = var.ami_id
   instance_initiated_shutdown_behavior = "terminate"
+  instance_type                        = var.instance_type
   key_name                             = var.keypair
   update_default_version               = true
   monitoring {

@@ -1,12 +1,4 @@
 
-variable "aws_access_key" {
-  description = "Access key used by terraform"
-}
-
-variable "aws_secret_key" {
-  description = "Secret key used by terraform"
-}
-
 variable "aws_region" {
   default = "us-east-1"
 }
@@ -43,7 +35,7 @@ variable "keypair" {
 }
 
 variable "instance_type" {
-  default = "m5a.large"
+  default = "m5a.xlarge"
 }
 
 variable "subnet_id" {
