@@ -3,10 +3,6 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "tf_role_arn" {
-  default = "arn:aws:iam::992382483259:role/fieldeng_circleci_labs_oidc_oauth_role"
-}
-
 variable "runner_prefix" {
   description = "Name prefix to be attached to resource names"
   default     = "circleci_linux_runner"
