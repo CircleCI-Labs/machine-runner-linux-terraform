@@ -2,8 +2,7 @@ terraform {
   backend "s3" {
     bucket   = "<tf-state-bucket-name-goes-here>"
     key      = "<tf-state-filename>.tfstate"
-    region   = "us-east-1"
-    role_arn = "<role-arn-name-for-terraform-to-assume"
+    region   = var.aws_region
   }
   required_version = ">= 1.5.0"
   required_providers {
