@@ -8,8 +8,16 @@ variable "runner_prefix" {
   default     = "circleci_linux_runner"
 }
 
+variable "asg_desired_capacity" {
+  description = "Desired Capacity for the CircleCI Runner Autoscaling group"
+}
+
+variable "asg_max_capacity" {
+  description = "Max size for the CircleCI Runner Autoscaling group"
+}
+
 variable "volume_size" {
-  default = "30"
+  default = "100"
 }
 
 variable "volume_type" {
