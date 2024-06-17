@@ -40,7 +40,6 @@ variable "subnet_id" {
 
 variable "security_group_id" {
   description = "Security Group for Runners"
-  default     = "sg-123456"
 }
 
 variable "runner_token_secret_name" {

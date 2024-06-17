@@ -13,12 +13,15 @@ parameters:
   custom-config:
     default: false
     type: boolean
-  default-region:
-    default: us-east-1
-    type: string
   workspace:
     default: "aws-terraform"
     type: string
+  aws-default-region:
+    type: string
+    default: "us-east-1"
+  oidc-role:
+    type: string
+    default: "arn:aws:iam::<account-id-goes-here>:role/<role-name>"
 
 executors:
    ubuntu-default:
@@ -26,12 +29,12 @@ executors:
        image: ubuntu-2204:2024.04.4
      resource_class: medium
      environment: 
-       AWS_REGION: "us-east-1"
+       AWS_REGION: << pipeline.parameters.aws-default-region >>
+
 
 commands:
-  setup-executor:
+  install-terraform:
     steps:
-      - checkout
       - run:
           name: Install Terraform version << pipeline.parameters.tf-version >>
           command: | 
@@ -41,46 +44,38 @@ commands:
                sudo unzip -o terraform_<< pipeline.parameters.tf-version >>.zip
                sudo mv terraform /usr/local/bin/
 
+
 jobs:
   tf-validate:
     executor: ubuntu-default
     steps:
-      - setup-executor
-      - run:
-          name: run terraform validate
-          command: |
-               cd << pipeline.parameters.workspace >>
-               terraform init -backend=false
-               terraform validate
-      
-  tf-plan:
+      - checkout
+      - install-terraform
+      - run: terraform validate
+
+  tf-plan-apply:
     executor: ubuntu-default
     steps:
-      - setup-executor
+      - checkout
+      - aws-cli/setup:
+          region: << pipeline.parameters.aws-default-region >>
+          role_arn: << pipeline.parameters.oidc-role >>
+          role_session_name: "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}"
+      - install-terraform
       - run:
-          name: run terraform plan
+          name: run Terraform Plan
           command: |
                cd << pipeline.parameters.workspace >>
                terraform init -input=false
-               terraform plan -out tfapply -var-file="terraform-test.tfvars"
+               terraform plan -out tfapply -var-file="terraform.tfvars"
       - persist_to_workspace:
           root: .
           paths:
             - .
 
 
+
 workflows:
   tf-validate:
-    when:
-      and:
-        - equal: ["main", << pipeline.git.branch >> ]
-        - equal: ["https://github.com/CircleCI-Labs/machine-runner-linux-terraform", << pipeline.project.git_url >>]
     jobs:
       - tf-validate
-      
-  tf-workflow:
-    when: 
-      and: 
-       - equal: ["terraform-test", << pipeline.git.branch >>]
-    jobs:
-      - tf-plan

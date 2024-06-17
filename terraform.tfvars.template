@@ -1,0 +1,4 @@
+subnet_id="subnet-id"
+security_group_id="sg-abcd12345"
+keypair="<keypair-name-goes-here>"
+runner_token_secret_name="arn:aws:secretsmanager:<region>:<account-id>:secret:<secret-name-where-runner-token-is-stored>"
