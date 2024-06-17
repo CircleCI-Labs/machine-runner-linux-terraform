@@ -10,10 +10,12 @@ variable "runner_prefix" {
 
 variable "asg_desired_capacity" {
   description = "Desired Capacity for the CircleCI Runner Autoscaling group"
+  type        = number
 }
 
 variable "asg_max_capacity" {
   description = "Max size for the CircleCI Runner Autoscaling group"
+  type        = number
 }
 
 variable "volume_size" {
