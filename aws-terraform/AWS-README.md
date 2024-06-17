@@ -5,7 +5,7 @@
 
 - Step 2: Once you have the OIDC role, then you can reference the Terraform template in the format below and run `terraform plan` and `terraform apply`
 
-  ```
+```
   module "my-aws-runner-asg" {
   source                    = "git::https://github.com/CircleCI-Labs/machine-runner-linux-terraform.git//aws-terraform?ref=main"
   asg_desired_capacity      = 2
@@ -42,4 +42,5 @@ terraform {
     }
   }
 }
-  ```
+
+```
