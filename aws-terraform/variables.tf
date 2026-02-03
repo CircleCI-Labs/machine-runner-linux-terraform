@@ -22,8 +22,8 @@ variable "volume_type" {
 }
 
 variable "ami_id" {
-  default     = "ami-003a4b9e4d6e86322"
-  description = "ubuntu-noble-24.04-amd64-server"
+  default     = "ami-00032c95c343f8efb"
+  description = "Canonical, Ubuntu, 25.04, amd64 plucky image"
 }
 
 variable "availability_zone" {
