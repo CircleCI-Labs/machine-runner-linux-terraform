@@ -2,6 +2,14 @@
 
 A Terraform module for creating an AWS Autoscaling Group with EC2 [CircleCI Self-Hosted Linux Runners](https://circleci.com/docs/install-machine-runner-3-on-linux/)
 
+## Disclaimer
+
+CircleCI Labs, including this repo, is a collection of solutions developed by members of CircleCI's field engineering teams through our engagement with various customer needs.
+
+-   ✅ Created by engineers @ CircleCI
+-   ✅ Used by real CircleCI customers
+-   ❌ **not** officially supported by CircleCI support
+
 ## Features
 
 - Autoscaling Group with configurable capacity
@@ -234,12 +242,5 @@ source = "git::https://github.com/CircleCI-Labs/machine-runner-linux-terraform.g
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Disclaimer
-
-CircleCI Labs, including this repo, is a collection of solutions developed by members of CircleCI's field engineering teams through our engagement with various customer needs.
-
--   ✅ Created by engineers @ CircleCI
--   ✅ Used by real CircleCI customers
--   ❌ **not** officially supported by CircleCI support
 
 
