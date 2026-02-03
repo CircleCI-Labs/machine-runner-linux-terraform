@@ -1,0 +1,22 @@
+version: 2.1
+
+jobs:
+  no-op-commit:
+    type: no-op
+  feature-branch-run:
+    docker:
+      - image: cimg/deploy:2025.01
+    steps:
+      - run: echo "hello"
+      - run: terraform -v
+
+workflows:
+  default-pushes:
+    when: pipeline.git.branch == "main"
+    jobs:
+      - no-op-commit
+
+  feature-branch:
+    when: pipeline.git.branch != "main"
+    jobs:
+      - feature-branch-run

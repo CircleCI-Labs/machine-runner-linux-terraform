@@ -1,0 +1,30 @@
+# AWS Configuration
+aws_region        = "us-east-1"
+availability_zone = "us-east-1a"
+
+# Runner Configuration
+runner_prefix        = "my-circleci-runner"
+asg_desired_capacity = 2
+asg_max_capacity     = 5
+
+# Network Configuration (REQUIRED - Update with your values)
+subnet_id         = "subnet-xxxxxxxxx"
+security_group_id = "sg-xxxxxxxxx"
+keypair           = "your-keypair-name"
+
+# Secrets Manager (REQUIRED - Update with your secret name)
+runner_token_secret_name = "your-runner-token-secret"
+
+# Instance Configuration
+instance_type = "m5a.xlarge"
+ami_id        = "ami-04b70fa74e45c3917" # Ubuntu 24.04 LTS in us-east-1
+volume_size   = "100"
+volume_type   = "gp3"
+
+# Tags
+default_tags = {
+  "Team"        = "circleci"
+  "Environment" = "production"
+  "iac"         = "true"
+  "owner"       = "circleci"
+}

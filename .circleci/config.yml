@@ -46,12 +46,52 @@ commands:
 
 
 jobs:
-  tf-validate:
+  tf-validate-module:
     executor: ubuntu-default
     steps:
       - checkout
       - install-terraform
-      - run: terraform validate
+      - run:
+          name: Validate module syntax
+          command: |
+            cd aws-terraform
+            terraform init -backend=false
+            terraform validate
+      - run:
+          name: Check module formatting
+          command: |
+            cd aws-terraform
+            terraform fmt -check -recursive
+
+  tf-test-module-structure:
+    executor: ubuntu-default
+    steps:
+      - checkout
+      - install-terraform
+      - run:
+          name: Test module can be instantiated
+          command: |
+            cd test
+            terraform init
+            terraform validate
+            echo "✓ Module structure is valid"
+
+  tf-test-module-plan:
+    executor: ubuntu-default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          region: << pipeline.parameters.aws-default-region >>
+          role_arn: << pipeline.parameters.oidc-role >>
+          role_session_name: "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}"
+      - install-terraform
+      - run:
+          name: Test module plan with AWS
+          command: |
+            cd test
+            terraform init
+            terraform plan
+            echo "✓ Module plan successful"
 
   tf-plan-apply:
     executor: ubuntu-default
@@ -76,6 +116,12 @@ jobs:
 
 
 workflows:
-  tf-validate:
+  module-validation:
     jobs:
-      - tf-validate
+      - tf-validate-module
+      - tf-test-module-structure:
+          requires:
+            - tf-validate-module
+      - tf-test-module-plan:
+          requires:
+            - tf-test-module-structure
