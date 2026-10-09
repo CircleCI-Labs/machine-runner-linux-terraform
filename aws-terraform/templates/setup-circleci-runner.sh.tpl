@@ -23,6 +23,10 @@ sudo awk '
 sudo mv "$tmp_config" /etc/circleci-runner/circleci-runner-config.yaml
 %{ endif ~}
 
+# The circleci service user must be able to read the config; other users must not.
+sudo chown circleci: /etc/circleci-runner/circleci-runner-config.yaml
+sudo chmod 600 /etc/circleci-runner/circleci-runner-config.yaml
+
 # Start runner service
 sudo systemctl enable circleci-runner
 sudo systemctl start circleci-runner
