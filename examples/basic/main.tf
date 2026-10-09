@@ -24,12 +24,15 @@ module "circleci_runner_asg" {
   runner_token_secret_name = var.runner_token_secret_name
 
   # Optional variables with custom values
-  runner_prefix     = var.runner_prefix
-  availability_zone = var.availability_zone
-  instance_type     = var.instance_type
-  ami_id            = var.ami_id
-  volume_size       = var.volume_size
-  volume_type       = var.volume_type
+  runner_prefix        = var.runner_prefix
+  availability_zone    = var.availability_zone
+  instance_type        = var.instance_type
+  ami_id               = var.ami_id
+  volume_size          = var.volume_size
+  volume_type          = var.volume_type
+  iam_instance_profile = var.iam_instance_profile
+  server               = var.server
+  server_url           = var.server_url
 
   # Custom tags
   default_tags = var.default_tags

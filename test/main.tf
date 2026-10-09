@@ -15,11 +15,14 @@ module "circleci_runner_asg_test" {
   runner_token_secret_name = var.runner_token_secret_name
 
   # Optional variables
-  runner_prefix     = var.runner_prefix
-  instance_type     = var.instance_type
-  availability_zone = var.availability_zone
-  ami_id            = var.ami_id
-  volume_size       = var.volume_size
-  volume_type       = var.volume_type
-  default_tags      = var.default_tags
+  runner_prefix        = var.runner_prefix
+  instance_type        = var.instance_type
+  availability_zone    = var.availability_zone
+  ami_id               = var.ami_id
+  volume_size          = var.volume_size
+  volume_type          = var.volume_type
+  iam_instance_profile = var.iam_instance_profile
+  server               = var.server
+  server_url           = var.server_url
+  default_tags         = var.default_tags
 }

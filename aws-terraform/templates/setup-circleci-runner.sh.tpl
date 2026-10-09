@@ -13,6 +13,15 @@ sudo apt-get install -y circleci-runner
 
 # Configure runner token
 sudo sed -i "s/<< AUTH_TOKEN >>/${cci_runner_token}/g" /etc/circleci-runner/circleci-runner-config.yaml
+%{ if server ~}
+# CircleCI Server: write api.url beside auth_token. This block is omitted when server is false.
+tmp_config="$(mktemp)"
+sudo awk '
+  { print }
+  /auth_token:/ && !done { print "  url: ${trimspace(server_url)}"; done = 1 }
+' /etc/circleci-runner/circleci-runner-config.yaml | sudo tee "$tmp_config" >/dev/null
+sudo mv "$tmp_config" /etc/circleci-runner/circleci-runner-config.yaml
+%{ endif ~}
 
 # Start runner service
 sudo systemctl enable circleci-runner

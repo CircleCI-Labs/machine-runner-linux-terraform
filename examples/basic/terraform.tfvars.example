@@ -21,6 +21,17 @@ ami_id        = "ami-04b70fa74e45c3917" # Ubuntu 24.04 LTS in us-east-1
 volume_size   = "100"
 volume_type   = "gp3"
 
+# Optional existing IAM instance profile name or instance-profile ARN.
+# Leave unset to launch runner instances without an instance profile.
+# This does not create an IAM role. Use the instance profile name, not the role name.
+# iam_instance_profile = "my-runner-instance-profile"
+# iam_instance_profile = "arn:aws:iam::123456789012:instance-profile/my-runner-instance-profile"
+
+# CircleCI Cloud is the default. Set server = true and server_url for CircleCI Server.
+# When server is false, the runner config does not get an api.url line.
+server = false
+# server_url = "https://circleci.example.com"
+
 # Tags
 default_tags = {
   "Team"        = "circleci"

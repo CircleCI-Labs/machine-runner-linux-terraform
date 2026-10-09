@@ -18,6 +18,9 @@ CircleCI Labs, including this repo, is a collection of solutions developed by me
 - Integration with AWS Secrets Manager for secure token management
 - Cloud-init based runner setup
 - Customizable tags and resource naming
+- Optional attachment of an existing IAM instance profile
+- Optional CircleCI Server API URL in the runner startup script
+- Optional CircleCI job to refresh Auto Scaling instances after apply
 
 ## Architecture
 
@@ -157,6 +160,9 @@ module "circleci_runner_asg" {
   runner_prefix     = "my-circleci-runner"
   instance_type     = "m5a.xlarge"
   availability_zone = "us-east-1a"
+  # iam_instance_profile = "my-runner-instance-profile"
+  # server               = false
+  # server_url           = "https://circleci.example.com"
 }
 ```
 
@@ -177,6 +183,18 @@ To use this module, you **must** provide these 6 variables:
 6. **`runner_token_secret_name`** - Name of your AWS Secrets Manager secret containing the runner token
 
 All other variables have sensible defaults and are optional.
+
+### Optional IAM instance profile
+
+Set `iam_instance_profile` to the **name** or **ARN** of an existing IAM instance profile to attach it to runner instances. Leave it unset to launch instances with no instance profile. The module does not create an IAM role, instance profile, or policy. Pass the instance profile name (for example `my-runner-instance-profile`), not the IAM role name. Role ARNs are rejected.
+
+### Optional CircleCI Server URL
+
+Set `server = true` and `server_url` to your server installation, for example `https://circleci.example.com`. The instance startup script then writes `url: <server_url>` under `api:` in `/etc/circleci-runner/circleci-runner-config.yaml`, next to `auth_token`. The default `server = false` omits that line, so CircleCI Cloud installs stay unchanged. If `server` is true and `server_url` is empty, Terraform variable validation fails and nothing is applied.
+
+### Optional instance refresh
+
+Instance refresh is a CircleCI job, not a Terraform resource. Pipeline parameter `refresh-instances` defaults to `false`. The `apply-and-refresh` workflow runs only when that parameter is `true`. It runs `tf-plan-apply` (plan, then apply) and then `refresh-asg-instances`, which requires `tf-plan-apply`. That job runs `aws autoscaling start-instance-refresh` against this module's Auto Scaling Group (`terraform output -raw autoscaling_group_name`). The refresh starts immediately. When `refresh-instances` is `false`, the workflow and the refresh job do not run.
 
 ### Prerequisites
 
@@ -213,6 +231,9 @@ For OIDC-based authentication setup, see the [AWS-README.md](./aws-terraform/AWS
 | availability_zone | AWS availability zone | string | "us-east-1a" | no |
 | volume_size | EBS volume size in GB | string | "100" | no |
 | volume_type | EBS volume type | string | "gp3" | no |
+| iam_instance_profile | Existing IAM instance profile name or instance-profile ARN | string | null | no |
+| server | Write a CircleCI Server URL into the runner config | bool | false | no |
+| server_url | CircleCI Server URL used when server is true | string | "" | no |
 | default_tags | Default tags for resources | map(string) | See variables.tf | no |
 
 **Note:** The AWS region is configured through the AWS provider block in your root module, not as a module input variable.

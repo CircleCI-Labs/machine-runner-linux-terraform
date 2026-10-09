@@ -66,6 +66,8 @@ You can customize the deployment by modifying variables in `terraform.tfvars`:
 - **Instance Type**: Change `instance_type` for different compute requirements
 - **Storage**: Modify `volume_size` and `volume_type`
 - **AMI**: Update `ami_id` to use a different base image
+- **IAM instance profile**: Set `iam_instance_profile` to an existing instance profile name or ARN. Leave it unset to launch without one
+- **CircleCI Server**: Set `server = true` and `server_url = "https://circleci.example.com"` to write `api.url` in the runner config. The default `server = false` omits the url line
 - **Tags**: Customize `default_tags` for your organization's tagging strategy
 
 ## Outputs

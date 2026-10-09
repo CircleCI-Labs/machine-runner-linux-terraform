@@ -13,6 +13,9 @@ parameters:
   custom-config:
     default: false
     type: boolean
+  refresh-instances:
+    default: false
+    type: boolean
   workspace:
     default: "aws-terraform"
     type: string
@@ -108,10 +111,34 @@ jobs:
                cd << pipeline.parameters.workspace >>
                terraform init -input=false
                terraform plan -out tfapply -var-file="terraform.tfvars"
+      - run:
+          name: run Terraform Apply
+          command: |
+               cd << pipeline.parameters.workspace >>
+               terraform apply -auto-approve tfapply
       - persist_to_workspace:
           root: .
           paths:
             - .
+
+  refresh-asg-instances:
+    executor: ubuntu-default
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - aws-cli/setup:
+          region: << pipeline.parameters.aws-default-region >>
+          role_arn: << pipeline.parameters.oidc-role >>
+          role_session_name: "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}"
+      - run:
+          name: Start ASG instance refresh
+          command: |
+            cd << pipeline.parameters.workspace >>
+            ASG_NAME="$(terraform output -raw autoscaling_group_name)"
+            aws autoscaling start-instance-refresh \
+              --auto-scaling-group-name "$ASG_NAME" \
+              --preferences '{"MinHealthyPercentage":50,"SkipMatching":false}'
 
 
 
@@ -125,3 +152,12 @@ workflows:
       - tf-test-module-plan:
           requires:
             - tf-test-module-structure
+
+  # Opt-in only. Default pipelines keep module-validation and do not apply or refresh.
+  apply-and-refresh:
+    when: << pipeline.parameters.refresh-instances >>
+    jobs:
+      - tf-plan-apply
+      - refresh-asg-instances:
+          requires:
+            - tf-plan-apply

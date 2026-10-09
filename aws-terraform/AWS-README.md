@@ -14,6 +14,9 @@
   subnet_id                 = "subnet-123456789"
   security_group_id         = "sg-abcd1234"
   runner_token_secret_name  = "awesomecicd-standalone-secrets"
+  # iam_instance_profile    = "my-runner-instance-profile"
+  # server                  = false
+  # server_url              = "https://circleci.example.com"
 }
 
 provider "aws" {
