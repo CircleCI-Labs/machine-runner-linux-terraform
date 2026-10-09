@@ -52,6 +52,12 @@ variable "keypair" {
   default     = "test-keypair"
 }
 
+variable "iam_instance_profile" {
+  description = "Optional IAM instance profile name or ARN"
+  type        = string
+  default     = null
+}
+
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -74,6 +80,18 @@ variable "runner_token_secret_name" {
   description = "Runner token secret name"
   type        = string
   default     = "test-runner-token"
+}
+
+variable "server" {
+  description = "When true, configure the runner for CircleCI Server"
+  type        = bool
+  default     = false
+}
+
+variable "server_url" {
+  description = "CircleCI Server URL used when server is true"
+  type        = string
+  default     = ""
 }
 
 variable "default_tags" {

@@ -1,4 +1,8 @@
 
+locals {
+  iam_instance_profile_name = var.iam_instance_profile == null ? "" : trimspace(var.iam_instance_profile)
+}
+
 resource "aws_launch_template" "linux_runner_launch_template" {
   name = "${var.runner_prefix}_launch_template"
   block_device_mappings {
@@ -15,7 +19,22 @@ resource "aws_launch_template" "linux_runner_launch_template" {
   instance_initiated_shutdown_behavior = "terminate"
   instance_type                        = var.instance_type
   key_name                             = var.keypair
-  update_default_version               = true
+
+  dynamic "iam_instance_profile" {
+    for_each = local.iam_instance_profile_name != "" && !startswith(local.iam_instance_profile_name, "arn:") ? [local.iam_instance_profile_name] : []
+    content {
+      name = iam_instance_profile.value
+    }
+  }
+
+  dynamic "iam_instance_profile" {
+    for_each = startswith(local.iam_instance_profile_name, "arn:") ? [local.iam_instance_profile_name] : []
+    content {
+      arn = iam_instance_profile.value
+    }
+  }
+
+  update_default_version = true
   monitoring {
     enabled = true
   }

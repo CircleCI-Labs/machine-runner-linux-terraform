@@ -51,6 +51,12 @@ variable "keypair" {
   type        = string
 }
 
+variable "iam_instance_profile" {
+  description = "Optional name or ARN of an existing IAM instance profile to attach to runner EC2 instances. Leave unset to launch without an instance profile."
+  type        = string
+  default     = null
+}
+
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
@@ -70,6 +76,18 @@ variable "security_group_id" {
 variable "runner_token_secret_name" {
   description = "Name of the AWS Secrets Manager Secret where the runner token is stored"
   type        = string
+}
+
+variable "server" {
+  description = "When true, write server_url under api in the CircleCI runner config. When false, do not add a server URL."
+  type        = bool
+  default     = false
+}
+
+variable "server_url" {
+  description = "CircleCI Server URL used when server is true. Example: https://circleci.example.com."
+  type        = string
+  default     = ""
 }
 
 variable "default_tags" {
